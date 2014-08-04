@@ -61,8 +61,7 @@
 
  https://dev.xing.com/docs/post/users/:id/status_message
  */
-- (void)postStatusMessage:(NSString*)statusMessage
-                   userID:(NSString*)userID
+- (void)postStatusMessage:(NSString *)statusMessage
                   success:(void (^)(id JSON))success
                   failure:(void (^)(NSError *error))failure;
 

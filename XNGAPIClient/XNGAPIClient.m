@@ -54,7 +54,7 @@ static XNGAPIClient *_sharedClient = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         if (_sharedClient == nil) {
-            NSURL *baseURL = [NSURL URLWithString:@"https://www.xing.com"];
+            NSURL *baseURL = [NSURL URLWithString:@"https://api.xing.com"];
             _sharedClient = [[XNGAPIClient alloc] initWithBaseURL:baseURL];
         }
     });
@@ -68,8 +68,7 @@ static XNGAPIClient *_sharedClient = nil;
 - (id)initWithBaseURL:(NSURL *)url {
     self = [super initWithBaseURL:url];
     if (self) {
-        self.baseURL = url;
-// TODO: find AFHMACSHA1SignatureMethod replacement
+        _oAuthHandler = [[XNGOAuthHandler alloc] init];
 //        self.signatureMethod = AFHMACSHA1SignatureMethod;
         self.responseSerializer = [[AFJSONRequestSerializer alloc] init];
 #ifndef TARGET_OS_MAC
@@ -203,6 +202,11 @@ static NSString * const XNGAPIClientOAuthAccessTokenPath = @"v1/access_token";
                        failure:(void (^)(NSError *error))failure  {
     [self.requestSerializer saveAccessToken:accessToken];
     // TODO: save user ID
+    [self.oAuthHandler saveUserID:userID
+                      accessToken:accessToken.key
+                           secret:accessToken.secret
+                          success:success
+                          failure:failure];
 //    NSString *userID = [accessToken.userInfo xng_stringForKey:@"user_id"];
 }
 
@@ -430,7 +434,7 @@ static NSString * const XNGAPIClientOAuthAccessTokenPath = @"v1/access_token";
 #pragma mark - Helper methods
 
 - (NSException *)exceptionForUserAlreadyLoggedIn {
-    return [NSException exceptionWithName:@"XNGUserLoginException" reason:@"A User is already loggedIn. Use the isLoggedin method to verfiy that no user is logged in before you use this method." userInfo:@{@"XNGLoggedInUserID":self.currentUserID}];
+    return [NSException exceptionWithName:@"XNGUserLoginException" reason:@"A User is already loggedIn. Use the isLoggedin method to verify that no user is logged in before you use this method." userInfo:@{@"XNGLoggedInUserID":self.currentUserID}];
 }
 
 - (NSException *)exceptionForNoConsumerKey {

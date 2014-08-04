@@ -76,14 +76,13 @@
     [self cancelAllHTTPOperationsWithMethod:@"GET" paths:@[path]];
 }
 
-- (void)postStatusMessage:(NSString*)statusMessage
-                   userID:(NSString*)userID
+- (void)postStatusMessage:(NSString *)statusMessage
                   success:(void (^)(id JSON))success
                   failure:(void (^)(NSError *error))failure {
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     parameters[@"message"] = statusMessage;
 
-    NSString *path = [NSString stringWithFormat:@"v1/users/%@/status_message", userID];
+    NSString *path = @"v1/users/me/status_message";
     [self postJSONPath:path parameters:parameters success:success failure:failure];
 }
 

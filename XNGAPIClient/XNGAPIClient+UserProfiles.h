@@ -49,4 +49,13 @@
  */
 - (void)cancelAllSearchByEmailHTTPOperations;
 
+/**
+ Fetches the users legal information.
+
+ https://dev.xing.com/docs/get/users/:user_id/legal_information
+*/
+- (void)getLegalInformationWithID:(NSString *)userID
+                          success:(void (^)(id))success
+                          failure:(void (^)(NSError *))failure;
+
 @end

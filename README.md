@@ -2,7 +2,7 @@
 
 ## NOTE
 
-The initial release of the Pod was named `XINGAPI`. This was confusing a lot of our users so we decided to rename it after the repository `XNGAPIClient`. 
+The initial release of the Pod was named `XINGAPI`. This was confusing a lot of our users so we decided to rename it after the repository `XNGAPIClient`.
 
 *PLEASE NOTE* that in favor of the new `XNGAPIClient` the `XINGAPI` pod will no longer be updated. Please switch your codebase to be future-proof.
 
@@ -10,7 +10,8 @@ If you have any questions please open an issue.
 
 ===
 
-[![Build Status](https://travis-ci.org/xing/XNGAPIClient.png?branch=master)](https://travis-ci.org/xing/XNGAPIClient)
+[![Build Status](https://travis-ci.org/xing/XNGAPIClient.svg?branch=master)](https://travis-ci.org/xing/XNGAPIClient) [![Dependency Status](https://www.versioneye.com/objective-c/xngapiclient/badge.svg)](https://www.versioneye.com/objective-c/xngapiclient)
+[![Reference Status](https://www.versioneye.com/objective-c/xngapiclient/reference_badge.svg)](https://www.versioneye.com/objective-c/xngapiclient/references)
 
 XNGAPIClient is the official client to access the XING API. In order to access the API, you only need an account on https://xing.com and an oauth consumer key and secret which can be obtained at https://dev.xing.com. Both is totally free and only takes a minute!
 
@@ -31,7 +32,7 @@ You can optain a consumer key and consumer secret by visiting https://dev.xing.c
 You need to setup the callback URL, which can be called after the user successfully logged in via Safari. Using the XING API Client your callback URL scheme will be ```xingapp<YOUR CONSUMER KEY>```. An example would be ```xingapp4a568854ef676b```
 
 To set it up just these steps:
- 
+
 1. Click on your Project file.
 2. Make sure your main target is selected.
 3. Click on the Info button.
@@ -85,7 +86,7 @@ make a call to load your own profile:
 ``` objective-c
 [client getUserWithID:@"me"
            userFields:nil
-              success:^{
+              success:^(id JSON) {
 			 	// handle success
 			  }
               failure:^(NSError *error) {

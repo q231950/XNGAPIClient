@@ -65,6 +65,15 @@
     [self cancelAllHTTPOperationsWithMethod:@"GET" paths:pathsToBeCanceled];
 }
 
+- (void)getLegalInformationWithID:(NSString *)userID success:(void (^)(id))success failure:(void (^)(NSError *))failure {
+    NSParameterAssert(userID);
+    NSString* path = [NSString stringWithFormat:@"v1/users/%@/legal_information", userID];
+    [self getJSONPath:path
+           parameters:nil
+              success:success
+              failure:failure];
+}
+
 #pragma mark - private methods
 
 - (NSString*)HTTPOperationPathForSearchForUsersByEmail {

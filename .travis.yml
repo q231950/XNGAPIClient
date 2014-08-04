@@ -1,9 +1,5 @@
 language: objective-c
 env:
-    - OS=6.1
-    - OS=7.0
-before_install:
-    - brew update
-    - bundle install
-    - cd Tests && pod install && cd $TRAVIS_BUILD_DIR
-script: rake test
+    - OS=7.1
+before_install: rake bootstrap
+script: rake spec

@@ -1,0 +1,12 @@
+workspace '../XNGAPIClient'
+platform :ios, '7.0'
+
+target "Example" do
+  pod 'XNGAPIClient', :path => '../XNGAPIClient.podspec'
+end
+
+target "ExampleTests" do
+  pod 'Expecta'
+  pod 'OHHTTPStubs', '= 3.1.0'
+  pod 'OCMock'
+end

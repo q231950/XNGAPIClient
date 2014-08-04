@@ -5,16 +5,8 @@ build/
 .DS_Store
 .LSOverride
 .idea/
-XNGAPIClientExample/.DS_Store
-
-# Test
-Tests/Pods/
-Tests/Podfile.lock
-
-# Doxygen Documentation
-Output/
-temp/
-
+.DS_Store
+Pods/
 # Xcode
 xcuserdata/
 *.xccheckout
