@@ -36,6 +36,19 @@
                                    failure:(void (^)(NSError *error))failure;
 
 /**
+ Returns a list of users the specified user might know.
+
+ https://dev.xing.com/docs/get/users/:user_id/network/recommendations
+ */
+- (void)getContactRecommendationsWithLimit:(NSInteger)limit
+                                    offset:(NSInteger)offset
+                           similarToUserID:(NSString *)similarUserID
+                                userFields:(NSString *)userFields
+                         requestedByHeader:(NSString *)requestedByHeader
+                                   success:(void (^)(id JSON))success
+                                   failure:(void (^)(NSError *error))failure;
+
+/**
  Block recommendation for user with given id.
 
  https://dev.xing.com/docs/delete/users/:user_id/network/recommendations/user/:id
@@ -43,6 +56,16 @@
 - (void)deleteContactRecommendationsForUserIDToIgnore:(NSString*)userIDToIgnore
                                       success:(void (^)(id JSON))success
                                       failure:(void (^)(NSError *error))failure;
+
+/**
+ Block recommendation for user with given id.
+
+ https://dev.xing.com/docs/delete/users/:user_id/network/recommendations/user/:id
+ */
+- (void)deleteContactRecommendationsForUserIDToIgnore:(NSString *)userIDToIgnore
+                                    requestedByHeader:(NSString *)requestedByHeader
+                                              success:(void (^)(id JSON))success
+                                              failure:(void (^)(NSError *error))failure;
 
 /**
  Cancel all recommendations-calls that are currently running/queued.

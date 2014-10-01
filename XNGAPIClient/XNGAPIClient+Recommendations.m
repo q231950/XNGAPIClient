@@ -53,11 +53,53 @@
               failure:failure];
 }
 
+- (void)getContactRecommendationsWithLimit:(NSInteger)limit
+                                    offset:(NSInteger)offset
+                           similarToUserID:(NSString *)similarUserID
+                                userFields:(NSString *)userFields
+                         requestedByHeader:(NSString *)requestedByHeader
+                                   success:(void (^)(id JSON))success
+                                   failure:(void (^)(NSError *error))failure {
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+
+    if (limit) {
+        parameters[@"limit"] = @(limit);
+    }
+    if (offset) {
+        parameters[@"offset"] = @(offset);
+    }
+    if ([similarUserID length]) {
+        parameters[@"similar_user_id"] = similarUserID;
+    }
+    if ([userFields length]) {
+        parameters[@"user_fields"] = userFields;
+    }
+
+    NSString *path = [self pathForGetContactRecommendations];
+    [self getJSONPath:path
+           parameters:parameters
+    requestedByHeader:requestedByHeader
+              success:success
+              failure:failure];
+}
+
 - (void)deleteContactRecommendationsForUserIDToIgnore:(NSString*)userIDToIgnore
                                               success:(void (^)(id JSON))success
                                               failure:(void (^)(NSError *error))failure {
     NSString *path = [NSString stringWithFormat:@"v1/users/me/network/recommendations/user/%@", userIDToIgnore];
     [self deleteJSONPath:path parameters:nil success:success failure:failure];
+}
+
+- (void)deleteContactRecommendationsForUserIDToIgnore:(NSString*)userIDToIgnore
+                                    requestedByHeader:(NSString *)requestedByHeader
+                                              success:(void (^)(id JSON))success
+                                              failure:(void (^)(NSError *error))failure {
+    NSString *path = [NSString stringWithFormat:@"v1/users/me/network/recommendations/user/%@", userIDToIgnore];
+    [self deleteJSONPath:path
+              parameters:nil
+       requestedByHeader:requestedByHeader
+                 success:success
+                 failure:failure];
 }
 
 - (void)cancelAllGetContactRecommendationsHTTPOperations {
