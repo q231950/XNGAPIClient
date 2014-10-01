@@ -151,6 +151,48 @@ extern NSString * const XNGAPIClientDeprecationWarningNotification;
                success:(void (^)(id))success
                failure:(void (^)(NSError *))failure;
 
+#pragma mark - block-based GET / PUT / POST / DELETE with optional request tracking headers
+
+/**
+ default method to make a GET call to the public XING API with request tracking.
+ */
+- (void)getJSONPath:(NSString *)path
+         parameters:(NSDictionary *)parameters
+  requestedByHeader:(NSString *)requestedByHeader
+            success:(void (^)(id))success
+            failure:(void (^)(NSError *))failure;
+
+/**
+ default method to make a DELETE call to the public XING API with request tracking.
+ */
+- (void)deleteJSONPath:(NSString *)path
+            parameters:(NSDictionary *)parameters
+     requestedByHeader:(NSString *)requestedByHeader
+               success:(void (^)(id JSON))success
+               failure:(void (^)(NSError *error))failure;
+
+#pragma mark - block-based GET / PUT / POST / DELETE with optional accept and request tracking headers
+
+/**
+ use this method to make a GET call to a vendor resource of the XING API with request tracking.
+ */
+- (void)getJSONPath:(NSString *)path
+         parameters:(NSDictionary *)parameters
+       acceptHeader:(NSString *)acceptHeader
+  requestedByHeader:(NSString *)requestedByHeader
+            success:(void (^)(id))success
+            failure:(void (^)(NSError *))failure;
+
+/**
+ use this method to make a DELETE call to a vendor resource of the XING API with request tracking.
+ */
+- (void)deleteJSONPath:(NSString *)path
+            parameters:(NSDictionary *)parameters
+          acceptHeader:(NSString *)acceptHeader
+     requestedByHeader:(NSString *)requestedByHeader
+               success:(void (^)(id))success
+               failure:(void (^)(NSError *))failure;
+
 #pragma mark - HTTP Operation queue methods
 
 - (void)enqueueJSONRequest:(NSMutableURLRequest *)request

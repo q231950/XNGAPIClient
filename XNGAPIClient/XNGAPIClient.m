@@ -377,6 +377,60 @@ static NSString * const XNGAPIClientOAuthAccessTokenPath = @"v1/access_token";
     [self enqueueJSONRequest:request success:success failure:failure];
 }
 
+#pragma mark - block-based GET / PUT / POST / DELETE with optional request tracking headers
+
+- (void)getJSONPath:(NSString *)path
+         parameters:(NSDictionary *)parameters
+  requestedByHeader:(NSString *)requestedByHeader
+            success:(void (^)(id))success
+            failure:(void (^)(NSError *))failure {
+    [self getJSONPath:path
+           parameters:parameters
+         acceptHeader:nil
+    requestedByHeader:requestedByHeader
+              success:success
+              failure:failure];
+}
+
+- (void)deleteJSONPath:(NSString *)path
+            parameters:(NSDictionary *)parameters
+     requestedByHeader:(NSString *)requestedByHeader
+               success:(void (^)(id JSON))success
+               failure:(void (^)(NSError *error))failure {
+    [self deleteJSONPath:path
+              parameters:parameters
+            acceptHeader:nil
+       requestedByHeader:requestedByHeader
+                 success:success
+                 failure:failure];
+}
+
+#pragma mark - block-based GET / PUT / POST / DELETE with optional accept and request tracking headers
+
+- (void)getJSONPath:(NSString *)path
+         parameters:(NSDictionary *)parameters
+       acceptHeader:(NSString *)acceptHeader
+  requestedByHeader:(NSString *)requestedByHeader
+            success:(void (^)(id))success
+            failure:(void (^)(NSError *))failure {
+    NSMutableURLRequest *request = [self requestWithMethod:@"GET" path:path parameters:parameters];
+    if (acceptHeader) [request setValue:acceptHeader forHTTPHeaderField:@"Accept"];
+    if (requestedByHeader) [request setValue:requestedByHeader forHTTPHeaderField:@"Request-Triggered-By"];
+    [self enqueueJSONRequest:request success:success failure:failure];
+}
+
+- (void)deleteJSONPath:(NSString *)path
+            parameters:(NSDictionary *)parameters
+          acceptHeader:(NSString *)acceptHeader
+     requestedByHeader:(NSString *)requestedByHeader
+               success:(void (^)(id))success
+               failure:(void (^)(NSError *))failure {
+    NSMutableURLRequest *request = [self requestWithMethod:@"DELETE" path:path parameters:parameters];
+    if (acceptHeader) [request setValue:acceptHeader forHTTPHeaderField:@"Accept"];
+    if (requestedByHeader) [request setValue:requestedByHeader forHTTPHeaderField:@"Request-Triggered-By"];
+    [self enqueueJSONRequest:request success:success failure:failure];
+}
+
 #pragma mark - OAuth related methods
 
 - (NSString *)currentUserID {
