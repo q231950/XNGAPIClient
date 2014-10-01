@@ -68,6 +68,33 @@
               failure:failure];
 }
 
+- (void)getJobSearchResultsForString:(NSString *)searchString
+                               limit:(NSInteger)limit
+                              offset:(NSInteger)offset
+                          userFields:(NSString *)userFields
+                   requestedByHeader:(NSString *)requestedByHeader
+                             success:(void (^)(id JSON))success
+                             failure:(void (^)(NSError *error))failure {
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    parameters[@"query"] = searchString;
+    if (limit) {
+        parameters[@"limit"] = @(limit);
+    }
+    if (offset) {
+        parameters[@"offset"] = @(offset);
+    }
+    if ([userFields length]) {
+        parameters[@"user_fields"] = userFields;
+    }
+
+    NSString *path = [self HTTPOperationPathForJobSearch];
+    [self getJSONPath:path
+           parameters:parameters
+    requestedByHeader:requestedByHeader
+              success:success
+              failure:failure];
+}
+
 - (void)getJobRecommendationsWithLimit:(NSInteger)limit
                                 offset:(NSInteger)offset
                             userFields:(NSString *)userFields
@@ -89,6 +116,33 @@
     NSString *path = @"v1/users/me/jobs/recommendations";
     [self getJSONPath:path
            parameters:parameters
+              success:success
+              failure:failure];
+}
+
+- (void)getJobRecommendationsWithLimit:(NSInteger)limit
+                                offset:(NSInteger)offset
+                            userFields:(NSString *)userFields
+                     requestedByHeader:(NSString *)requestedByHeader
+                               success:(void (^)(id JSON))success
+                               failure:(void (^)(NSError *error))failure {
+
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+
+    if (limit) {
+        parameters[@"limit"] = @(limit);
+    }
+    if (offset) {
+        parameters[@"offset"] = @(offset);
+    }
+    if ([userFields length]) {
+        parameters[@"user_fields"] = userFields;
+    }
+
+    NSString *path = @"v1/users/me/jobs/recommendations";
+    [self getJSONPath:path
+           parameters:parameters
+    requestedByHeader:requestedByHeader
               success:success
               failure:failure];
 }

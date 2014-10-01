@@ -46,6 +46,19 @@
                              failure:(void (^)(NSError *error))failure;
 
 /**
+ Returns a list of job postings that match the given criteria.
+
+ https://dev.xing.com/docs/get/jobs/find
+ */
+- (void)getJobSearchResultsForString:(NSString *)searchString
+                               limit:(NSInteger)limit
+                              offset:(NSInteger)offset
+                          userFields:(NSString *)userFields
+                   requestedByHeader:(NSString *)requestedByHeader
+                             success:(void (^)(id JSON))success
+                             failure:(void (^)(NSError *error))failure;
+
+/**
  Returns a list of job recommendations for the user.
 
  https://dev.xing.com/docs/get/users/:user_id/jobs/recommendations
@@ -53,6 +66,18 @@
 - (void)getJobRecommendationsWithLimit:(NSInteger)limit
                                 offset:(NSInteger)offset
                             userFields:(NSString *)userFields
+                               success:(void (^)(id JSON))success
+                               failure:(void (^)(NSError *error))failure;
+
+/**
+ Returns a list of job recommendations for the user.
+
+ https://dev.xing.com/docs/get/users/:user_id/jobs/recommendations
+ */
+- (void)getJobRecommendationsWithLimit:(NSInteger)limit
+                                offset:(NSInteger)offset
+                            userFields:(NSString *)userFields
+                     requestedByHeader:(NSString *)requestedByHeader
                                success:(void (^)(id JSON))success
                                failure:(void (^)(NSError *error))failure;
 
