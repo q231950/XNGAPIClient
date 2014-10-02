@@ -1,6 +1,7 @@
 #import <XCTest/XCTest.h>
 #import "XNGTestHelper.h"
 #import <XNGAPIClient/XNGAPI.h>
+#import <OCMock/OCMock.h>
 
 @interface XNGRecommendationsTests : XCTestCase
 
@@ -9,6 +10,11 @@
 @end
 
 @implementation XNGRecommendationsTests
+
+- (XNGAPIClient *)mockedAPIClient {
+    Class appsAPIClientClass = NSClassFromString(NSStringFromClass(XNGAPIClient.class));
+    return [OCMockObject partialMockForObject:[appsAPIClientClass sharedClient]];
+}
 
 - (void)setUp {
     [super setUp];
@@ -20,6 +26,25 @@
 - (void)tearDown {
     [super tearDown];
     [self.testHelper tearDown];
+}
+
+- (void)testGetRecommendationsInvokedWithDifferentSignature {
+    id classUnderTestMock = [self mockedAPIClient];
+
+    [[classUnderTestMock expect] getJobRecommendationsWithLimit:0
+                                                         offset:0
+                                                     userFields:nil
+                                              requestedByHeader:nil
+                                                        success:nil
+                                                        failure:nil];
+
+    [classUnderTestMock getJobRecommendationsWithLimit:0
+                                                offset:0
+                                            userFields:nil
+                                               success:nil
+                                               failure:nil];
+
+    [classUnderTestMock verify];
 }
 
 - (void)testGetRecommendations {
@@ -53,6 +78,7 @@
                                                                   offset:40
                                                          similarToUserID:@"1"
                                                               userFields:@"display_name"
+                                                       requestedByHeader:@"contactrequests"
                                                                  success:nil
                                                                  failure:nil];
      }
@@ -71,11 +97,27 @@
          [query removeObjectForKey:@"user_fields"];
          expect([query valueForKey:@"similar_user_id"]).to.equal(@"1");
          [query removeObjectForKey:@"similar_user_id"];
+         expect([[request allHTTPHeaderFields] valueForKey:@"Request-Triggered-By"]).to.equal(@"contactrequests");
 
          expect([query allKeys]).to.haveCountOf(0);
 
          expect([body allKeys]).to.haveCountOf(0);
      }];
+}
+
+- (void)testDeleteRecommendationInvokedWithDifferentSignature {
+    id classUnderTestMock = [self mockedAPIClient];
+
+    [[classUnderTestMock expect] deleteContactRecommendationsForUserIDToIgnore:nil
+                                                             requestedByHeader:nil
+                                                                       success:nil
+                                                                       failure:nil];
+
+    [classUnderTestMock deleteContactRecommendationsForUserIDToIgnore:nil
+                                                              success:nil
+                                                              failure:nil];
+
+    [classUnderTestMock verify];
 }
 
 - (void)testDeleteRecommendation {

@@ -1,6 +1,7 @@
 #import <XCTest/XCTest.h>
 #import "XNGTestHelper.h"
 #import <XNGAPIClient/XNGAPI.h>
+#import <OCMock/OCMock.h>
 
 @interface XNGJobsTests : XCTestCase
 
@@ -9,6 +10,11 @@
 @end
 
 @implementation XNGJobsTests
+
+- (XNGAPIClient *)mockedAPIClient {
+    Class appsAPIClientClass = NSClassFromString(NSStringFromClass(XNGAPIClient.class));
+    return [OCMockObject partialMockForObject:[appsAPIClientClass sharedClient]];
+}
 
 - (void)setUp {
     [super setUp];
@@ -68,6 +74,27 @@
      }];
 }
 
+- (void)testGetJobSearchResultsInvokedWithDifferentSignature {
+    id classUnderTestMock = [self mockedAPIClient];
+
+    [[classUnderTestMock expect] getJobSearchResultsForString:@"bla"
+                                                        limit:0
+                                                       offset:0
+                                                   userFields:nil
+                                            requestedByHeader:nil
+                                                      success:nil
+                                                      failure:nil];
+
+    [classUnderTestMock getJobSearchResultsForString:@"bla"
+                                               limit:0
+                                              offset:0
+                                          userFields:nil
+                                             success:nil
+                                             failure:nil];
+
+    [classUnderTestMock verify];
+}
+
 - (void)testGetJobSearchResults {
     [self.testHelper executeCall:
      ^{
@@ -101,6 +128,7 @@
                                                              limit:20
                                                             offset:40
                                                         userFields:@"display_name"
+                                                 requestedByHeader:@"jobs.top"
                                                            success:nil
                                                            failure:nil];
      }
@@ -119,11 +147,31 @@
          [query removeObjectForKey:@"offset"];
          expect([query valueForKey:@"user_fields"]).to.equal(@"display_name");
          [query removeObjectForKey:@"user_fields"];
+         expect([[request allHTTPHeaderFields] valueForKey:@"Request-Triggered-By"]).to.equal(@"jobs.top");
 
          expect([query allKeys]).to.haveCountOf(0);
 
          expect([body allKeys]).to.haveCountOf(0);
      }];
+}
+
+- (void)testGetJobRecommendationsInvokedWithDifferentSignature {
+    id classUnderTestMock = [self mockedAPIClient];
+
+    [[classUnderTestMock expect] getJobRecommendationsWithLimit:0
+                                                         offset:0
+                                                     userFields:nil
+                                              requestedByHeader:nil
+                                                        success:nil
+                                                        failure:nil];
+
+    [classUnderTestMock getJobRecommendationsWithLimit:0
+                                                offset:0
+                                            userFields:nil
+                                               success:nil
+                                               failure:nil];
+
+    [classUnderTestMock verify];
 }
 
 - (void)testGetJobRecommendations {
@@ -155,6 +203,7 @@
          [[XNGAPIClient sharedClient] getJobRecommendationsWithLimit:20
                                                               offset:40
                                                           userFields:@"display_name"
+                                                   requestedByHeader:@"jobs"
                                                              success:nil
                                                              failure:nil];
      }
@@ -171,6 +220,7 @@
          [query removeObjectForKey:@"offset"];
          expect([query valueForKey:@"user_fields"]).to.equal(@"display_name");
          [query removeObjectForKey:@"user_fields"];
+         expect([[request allHTTPHeaderFields] valueForKey:@"Request-Triggered-By"]).to.equal(@"jobs");
 
          expect([query allKeys]).to.haveCountOf(0);
 
