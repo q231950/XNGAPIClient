@@ -49,23 +49,13 @@
                           userFields:(NSString *)userFields
                              success:(void (^)(id JSON))success
                              failure:(void (^)(NSError *error))failure {
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    parameters[@"query"] = searchString;
-    if (limit) {
-        parameters[@"limit"] = @(limit);
-    }
-    if (offset) {
-        parameters[@"offset"] = @(offset);
-    }
-    if ([userFields length]) {
-        parameters[@"user_fields"] = userFields;
-    }
-
-    NSString *path = [self HTTPOperationPathForJobSearch];
-    [self getJSONPath:path
-           parameters:parameters
-              success:success
-              failure:failure];
+    [self getJobSearchResultsForString:searchString
+                                 limit:limit
+                                offset:offset
+                            userFields:userFields
+                     requestedByHeader:nil
+                               success:success
+                               failure:failure];
 }
 
 - (void)getJobSearchResultsForString:(NSString *)searchString
@@ -100,24 +90,12 @@
                             userFields:(NSString *)userFields
                                success:(void (^)(id JSON))success
                                failure:(void (^)(NSError *error))failure {
-
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-
-    if (limit) {
-        parameters[@"limit"] = @(limit);
-    }
-    if (offset) {
-        parameters[@"offset"] = @(offset);
-    }
-    if ([userFields length]) {
-        parameters[@"user_fields"] = userFields;
-    }
-
-    NSString *path = @"v1/users/me/jobs/recommendations";
-    [self getJSONPath:path
-           parameters:parameters
-              success:success
-              failure:failure];
+    [self getJobRecommendationsWithLimit:limit
+                                  offset:offset
+                              userFields:userFields
+                       requestedByHeader:nil
+                                 success:success
+                                 failure:failure];
 }
 
 - (void)getJobRecommendationsWithLimit:(NSInteger)limit

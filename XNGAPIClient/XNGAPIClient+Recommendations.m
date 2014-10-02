@@ -31,26 +31,13 @@
                                 userFields:(NSString *)userFields
                                    success:(void (^)(id JSON))success
                                    failure:(void (^)(NSError *error))failure {
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-
-    if (limit) {
-        parameters[@"limit"] = @(limit);
-    }
-    if (offset) {
-        parameters[@"offset"] = @(offset);
-    }
-    if ([similarUserID length]) {
-        parameters[@"similar_user_id"] = similarUserID;
-    }
-    if ([userFields length]) {
-        parameters[@"user_fields"] = userFields;
-    }
-
-    NSString *path = [self pathForGetContactRecommendations];
-    [self getJSONPath:path
-           parameters:parameters
-              success:success
-              failure:failure];
+    [self getContactRecommendationsWithLimit:limit
+                                      offset:offset
+                             similarToUserID:similarUserID
+                                  userFields:userFields
+                           requestedByHeader:nil
+                                     success:success
+                                     failure:failure];
 }
 
 - (void)getContactRecommendationsWithLimit:(NSInteger)limit
@@ -86,8 +73,10 @@
 - (void)deleteContactRecommendationsForUserIDToIgnore:(NSString*)userIDToIgnore
                                               success:(void (^)(id JSON))success
                                               failure:(void (^)(NSError *error))failure {
-    NSString *path = [NSString stringWithFormat:@"v1/users/me/network/recommendations/user/%@", userIDToIgnore];
-    [self deleteJSONPath:path parameters:nil success:success failure:failure];
+    [self deleteContactRecommendationsForUserIDToIgnore:userIDToIgnore
+                                      requestedByHeader:nil
+                                                success:success
+                                                failure:failure];
 }
 
 - (void)deleteContactRecommendationsForUserIDToIgnore:(NSString*)userIDToIgnore
